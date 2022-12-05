@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -15,22 +16,29 @@ public class Player extends Entity{
 	GamePanel gp;
 	KeyInputs keyI;
 	
-	public final int screenX;
-	public final int screenY;
+	public int screenX;
+	public int screenY;
+	
 	
 	public Player (GamePanel gp, KeyInputs keyI) {
 		this.gp=gp;
 		this.keyI=keyI;
 		
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
-		screenY=9*(gp.screenHeight)/10- (gp.tileSize/2);
+		screenY = 9*gp.screenHeight/10- (gp.tileSize/2);
+		
+		solidArea = new Rectangle();
+		solidArea.x = 5;
+		solidArea.y = 6;
+		solidArea.width = 31;
+		solidArea.height = 36;
 		
 		setDefaultValues();
 		getPlayerImage();
 	}
 	public void setDefaultValues() {
-		worldX = 400; 
-		worldY = 500;//for now
+		worldX = 360; 
+		worldY = 3750;//for now
 		speed = 4;
 		//direction = "down";
 	}
@@ -55,36 +63,39 @@ public class Player extends Entity{
 		
 		if(keyI.upPressed == true || keyI.downPressed == true || keyI.leftPressed == true ||
 				keyI.rightPressed == true ) {
-			if(keyI.upPressed == true) {
+			
+			if(collisionOn == false) {
+				if(keyI.upPressed == true) {
+			
 				//direction = "up";
 				worldY -= speed;
+				//screenY -=speed;
 				//in java y values increases as they go down
 				//in java x values increases to the right
-			}
-			else if(keyI.downPressed == true) {
+				}
+			/*else if(keyI.downPressed == true) {
 				//direction = "down";
 				worldY += speed;
-			}
-			else if(keyI.leftPressed == true) {
+				//screenY +=speed;
+			}*/
+				else if(keyI.leftPressed == true) {
 				//direction = "left";
 				worldX -= speed;
-			}
-			else if(keyI.rightPressed == true) {
+				screenX -=speed;
+				}
+				else if(keyI.rightPressed == true) {
 				//direction = "right";
 				worldX += speed;
-			}
-			spriteCounter++;
-			if(spriteCounter >10) { //hareketleri yavaslatmak için 10'u düşür.
-				if(spriteNum == 1) {
-					spriteNum = 2;
+				screenX +=speed;
 				}
-				else if(spriteNum == 2 ) {
-					spriteNum = 1;
-				}
-				spriteCounter = 0;
+			
 			}
 		}
+		// CHECH TILE COLLISION
+		collisionOn = false;
+		gp.cChecker.checkTile(this);
 		
+		// IF COLLISION IS FALSE, PLAYER CAN MOVE
 		
 	}
 	
