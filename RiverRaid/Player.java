@@ -19,6 +19,7 @@ public class Player extends Entity{
 	public int screenX;
 	public int screenY;
 	
+	int hasFuel= 10;//kaçtane fueli var baþta þimdiik 10 olsun videoda anahtar sayýsý sayýyo ama baþta belli bi fuelimixz olmalý
 	
 	public Player (GamePanel gp, KeyInputs keyI) {
 		this.gp=gp;
@@ -30,6 +31,8 @@ public class Player extends Entity{
 		solidArea = new Rectangle();
 		solidArea.x = 5;
 		solidArea.y = 6;
+		solidAreaDefaultX=solidArea.x;
+		solidAreaDefaultY=solidArea.y;
 		solidArea.width = 31;
 		solidArea.height = 36;
 		
@@ -38,9 +41,8 @@ public class Player extends Entity{
 	}
 	public void setDefaultValues() {
 		worldX = 360; 
-		worldY = 3750;//for now
+		worldY = 7595;//for now
 		speed = 4;
-		//direction = "down";
 	}
 	
 	public void getPlayerImage() {
@@ -48,10 +50,6 @@ public class Player extends Entity{
 		try {
 			
 			plane = ImageIO.read(getClass().getResourceAsStream("ucak.png")); 
-			ship = ImageIO.read(getClass().getResourceAsStream("gemi.png"));
-			helicopter = ImageIO.read(getClass().getResourceAsStream("helicopter.png"));
-			fuel = ImageIO.read(getClass().getResourceAsStream("fuel.png"));
-			
 			
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -96,8 +94,42 @@ public class Player extends Entity{
 		gp.cChecker.checkTile(this);
 		
 		// IF COLLISION IS FALSE, PLAYER CAN MOVE
+		//check obj collision
+		int objectindex = gp.cChecker.checkObject(this, true);
+		pickUpObject(objectindex); //????
+		//hangi obkeye temas ettiðini anlýyoruz srm bunla
+	}
+	public void pickUpObject(int i) {
+		
+		if(i != 999) {//objeye dokunmadýysak i  999 deðildir
+			// gp.Obj[i]=null;; // bununla objeyi dokunduktan sonra kaybettik çok iyi
+			
+			String objectName = gp.obj[i].name;
+			 switch(objectName) {
+			 case "Fuel":
+				 hasFuel ++;
+				 gp.obj[i]=null; //fuel arttý ve kayboldu
+				 System.out.println("Fuel left: " + hasFuel); 
+				break;
+			 case "Helicopter":
+				 if (hasFuel>0) {
+				 gp.obj[i]=null;
+				 hasFuel--;// fuel varsa atýþ (sonra ayarlarýz) yapýp helicopteri yok etsin ?? videoyla belki böyle
+				 
+				 }
+				 break;
+			 case"Ship":
+				 if (hasFuel>0) {
+					 gp.obj[i]=null;
+					 hasFuel--;
+					 }
+			
 		
 	}
+	
+		}
+				 
+			 }
 	
 	
 	
