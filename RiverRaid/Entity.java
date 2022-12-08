@@ -16,7 +16,9 @@ public class Entity {
 	/* It describes an image with an accesible buffer of
 	 * image data.(we use this to store our image file
 	 */
+	
 	public Rectangle solidArea;
+	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean collisionOn = false;
 	
 }
