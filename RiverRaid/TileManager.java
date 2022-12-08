@@ -23,10 +23,11 @@ public class TileManager {
 		mapTileNumber = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
-		loadMap("/maps/world01.txt");
+		loadMap("/maps/world_map.txt");
 	}
 	
 	public void getTileImage() {
+		
 		try {
 			tile[0]=new Tiles();
 			tile[0].image = ImageIO.read(getClass().getResourceAsStream("grass.png"));
@@ -105,6 +106,14 @@ public class TileManager {
 			
 			//time --> video 5 14:40
 			//extract a tile number which is stored in mapTileNum[0][0]
+			if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+					worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+					worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+					worldY - gp.tileSize > gp.player.worldY - gp.player.screenY) {
+				
+				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			}
+					
 			g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 			worldCol++;
 			
